@@ -1,12 +1,55 @@
-# React + Vite
+# Task-Management-Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive task manager built with **React**, **Next.js**, and **Tailwind CSS**. Features include task creation, editing, filtering by status/priority, search, and REST API integration. Uses **Context API**, custom hooks, and supports SSR/SSG for performance. Optional deployment on **Vercel**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Task Manager Application
 
-## Expanding the ESLint configuration
+A simple Task Manager application built with **Node.js**, **Express**, **MongoDB**, and **React**. This application allows users to create, read, update, and delete tasks, as well as filter tasks based on their status and priority.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Setup Instructions](#setup-instructions)
+- [API Endpoints](#api-endpoints)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- Create, read, update, and delete tasks
+- Filter tasks by status and priority
+- Responsive design for a better user experience
+
+## Technologies Used
+
+### Backend:
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- CORS
+- Body-parser
+
+### Frontend:
+- React
+- React Router
+- React Query
+- Redux Toolkit
+- Tailwind CSS
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- MongoDB (local or MongoDB Atlas)
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/task-manager.git
+cd task-manager
