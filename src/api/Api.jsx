@@ -1,21 +1,29 @@
 /**
  * Fetches all tasks from the local API endpoint.
- * If the local fetch fails, it attempts to fetch from a placeholder API.
+ * If the local fetch fails (network error or non-OK response),
+ * it automatically falls back to using the placeholder API.
  *
  * @returns {Promise<Array>} An array of tasks.
- * @throws Error if both fetches fail.
+ * @throws Error if both fetch attempts fail.
  */
 export const fetchTasks = async () => {
-    // Attempt to fetch tasks from the local API
-    const response = await fetch('http://localhost:5000/api/tasks');
-    if (!response.ok) {
-        // If local API fails, use the placeholder API as a fallback
-        const placeholderResponse = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=10');
-        if (!placeholderResponse.ok) 
-            throw new Error('Failed to fetch tasks');
-        return placeholderResponse.json();
+    try {
+        // Attempt to fetch tasks from the local API
+        const response = await fetch('http://localhost:5000/api/tasks');
+        if (!response.ok) {
+            // If the local API returns a non-OK status, throw an error to trigger the fallback
+            throw new Error(`Local API error: ${response.status}`);
+        }
+        return response.json();
+    } catch (localError) {
+        console.warn('Local API failed, falling back to placeholder API:', localError.message);
+        // Fallback: fetch tasks from the placeholder API
+        const fallbackResponse = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=10');
+        if (!fallbackResponse.ok) {
+            throw new Error('Failed to fetch tasks from fallback API');
+        }
+        return fallbackResponse.json();
     }
-    return response.json();
 };
 
 /**
