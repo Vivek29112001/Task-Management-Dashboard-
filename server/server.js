@@ -2,23 +2,20 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-require('dotenv').config(); // Load env variables
+const fetch = require('node-fetch');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/taskmanager';
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-mongoose.connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('✅ MongoDB connected'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+const mongoURI = "mongodb://127.0.0.1:27017/taskmanager"; // Replace with your credentials
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 // Task model
 const TaskSchema = new mongoose.Schema({
@@ -33,10 +30,23 @@ const Task = mongoose.model('Task', TaskSchema);
 // API Endpoints
 app.get('/api/tasks', async (req, res) => {
     try {
+        // Try to fetch tasks from the local MongoDB database
         const tasks = await Task.find();
         res.json(tasks);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.error("Error fetching tasks from database, falling back to placeholder API:", err);
+        try {
+            // Fallback: fetch tasks from jsonplaceholder API
+            const placeholderResponse = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=10');
+            if (!placeholderResponse.ok) {
+                // If the placeholder API also fails, throw an error
+                throw new Error('Placeholder API response not OK');
+            }
+            const placeholderTasks = await placeholderResponse.json();
+            res.json(placeholderTasks);
+        } catch (fallbackErr) {
+            res.status(500).json({ message: fallbackErr.message });
+        }
     }
 });
 
@@ -76,12 +86,12 @@ app.delete('/api/tasks/:id', async (req, res) => {
         if (!deletedTask) return res.status(404).json({ message: 'Task not found' });
         res.status(204).send();
     } catch (err) {
-        console.error('Error deleting task:', err);
+        console.error('Error deleting task:', err); // Log the error for debugging
         res.status(500).json({ message: err.message });
     }
 });
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

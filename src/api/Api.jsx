@@ -92,4 +92,4 @@ export const editTask = async (task) => {
         throw new Error(`Failed to edit task (Status ${response.status}): ${errorMessage}`);
     }
     return response.json();
-}; 
+};
