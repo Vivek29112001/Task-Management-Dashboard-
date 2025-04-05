@@ -2,19 +2,23 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+require('dotenv').config(); // Load env variables
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/taskmanager';
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-const mongoURI = "mongodb://127.0.0.1:27017/taskmanager"; // Replace with your credentials
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('✅ MongoDB connected'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Task model
 const TaskSchema = new mongoose.Schema({
@@ -72,12 +76,12 @@ app.delete('/api/tasks/:id', async (req, res) => {
         if (!deletedTask) return res.status(404).json({ message: 'Task not found' });
         res.status(204).send();
     } catch (err) {
-        console.error('Error deleting task:', err); // Log the error for debugging
+        console.error('Error deleting task:', err);
         res.status(500).json({ message: err.message });
     }
 });
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
