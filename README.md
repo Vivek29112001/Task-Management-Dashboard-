@@ -1,7 +1,9 @@
 <<<<<<< HEAD
 # Task-Management-Dashboard
 
-A responsive task manager built with **React**, **Next.js**, and **Tailwind CSS**. Features include task creation, editing, filtering by status/priority, search, and REST API integration. Uses **Context API**, custom hooks, and supports SSR/SSG for performance. Optional deployment on **Vercel**.
+A responsive task manager built with **React**, **Next.js**, and **Tailwind CSS**. Features include task creation, editing, filtering by status/priority, search, and REST API integration. Uses **Context API**, custom hooks, and supports SSR/SSG for performance. Optional deployment on **Vercel**. 
+
+# Note : use local host database for mongoDB to add or delete data 
 
 
 ## Table of Contents
